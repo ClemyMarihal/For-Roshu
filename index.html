@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Roshu ❤️</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  overflow: hidden;
+}
+
+/* Envelope */
+.envelope {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 120px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.envelope:before {
+  content: "💌 Tap to open";
+  font-size: 14px;
+  color: #e91e63;
+}
+
+.letter {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 60%;
+  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 4;
+}
+
+h1 { text-align:center; color:#e91e63; }
+p { font-size:16px; line-height:1.6; color:#444; white-space:pre-line; }
+
+/* Hearts */
+.heart {
+  position: absolute;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh); opacity:1; }
+  100% { transform: translateY(-10vh); opacity:0; }
+}
+
+canvas { position:absolute; top:0; left:0; z-index:1; }
+
+.countdown {
+  text-align:center;
+  margin-top:15px;
+  font-weight:bold;
+  color:#e91e63;
+}
+</style>
+</head>
+<body>
+
+<div class="envelope" onclick="openLetter()"></div>
+
+<div class="letter" id="letter">
+  <h1>To My Roshu ❤️</h1>
+  <p id="text"></p>
+  <div class="countdown" id="countdown"></div>
+</div>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="confetti"></canvas>
+
+<script>
+
+const message = `Roshu... ❤️
+
+I don’t even know where to begin, because what I feel for you isn’t something simple that fits into words.
+
+We’re not even engaged yet… and still, somewhere deep inside me, you already feel like my forever.
+
+There’s something so calm about you… something that makes everything in my life feel a little more right, a little more steady.
+
+I find myself smiling for no reason, just thinking about you… about us… about all the little moments we haven’t even lived yet.
+
+And the most beautiful part?
+It doesn’t feel rushed. It doesn’t feel uncertain.
+It just feels right.
+
+Roshu, if this is just the beginning… I can’t wait to live the rest of my life choosing you, again and again, every single day.
+
+Yours, always ❤️`;
+
+let i = 0;
+function typeWriter() {
+  if (i < message.length) {
+    document.getElementById("text").innerHTML += message.charAt(i);
+    i++;
+    setTimeout(typeWriter, 40);
+  }
+}
+
+function openLetter() {
+  document.querySelector('.envelope').style.display = 'none';
+  document.getElementById('letter').style.display = 'block';
+  document.getElementById('music').play();
+  typeWriter();
+  startHearts();
+}
+
+// Hearts
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random()*window.innerWidth+"px";
+    heart.style.fontSize = Math.random()*20+10+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+  }, 300);
+}
+
+// Countdown (change date here)
+const targetDate = new Date("2026-12-20");
+setInterval(()=>{
+  const now = new Date();
+  const diff = targetDate - now;
+  const days = Math.floor(diff/(1000*60*60*24));
+  document.getElementById("countdown").innerHTML = `Counting days to us 💍: ${days} days`;
+},1000);
+
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const confetti = [];
+for (let i = 0; i < 150; i++) {
+  confetti.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*6+2,d:Math.random()*150});
+}
+
+function drawConfetti(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#fff";
+  ctx.beginPath();
+  confetti.forEach(c=>{
+    ctx.moveTo(c.x,c.y);
+    ctx.arc(c.x,c.y,c.r,0,Math.PI*2,true);
+  });
+  ctx.fill();
+  updateConfetti();
+}
+
+function updateConfetti(){
+  confetti.forEach(c=>{
+    c.y+=Math.cos(c.d)+1+c.r/2;
+    if(c.y>canvas.height){c.y=0;}
+  });
+}
+
+setInterval(drawConfetti,30);
+
+// Hidden message
+setTimeout(()=>{
+  alert("I love you more than you’ll ever know ❤️");
+},15000);
+
+</script>
+
+</body>
+</html>

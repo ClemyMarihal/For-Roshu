@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>For Roshu ❤️</title>
+
 <style>
 body {
   margin: 0;
@@ -30,7 +31,6 @@ body {
 
 .envelope:before {
   content: "💌 Tap to open";
-  font-size: 14px;
   color: #e91e63;
 }
 
@@ -52,7 +52,7 @@ body {
 }
 
 h1 { text-align:center; color:#e91e63; }
-p { font-size:16px; line-height:1.6; color:#444; white-space:pre-line; }
+p { line-height:1.6; white-space:pre-line; }
 
 .heart {
   position: absolute;
@@ -82,14 +82,14 @@ canvas { position:absolute; top:0; left:0; z-index:1; }
 
 .cheer-text {
   background: white;
-  padding: 8px 12px;
+  padding: 8px;
   border-radius: 15px;
   font-size: 12px;
   color: #e91e63;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 </style>
 </head>
+
 <body>
 
 <div class="envelope" onclick="openLetter()"></div>
@@ -104,6 +104,7 @@ canvas { position:absolute; top:0; left:0; z-index:1; }
   <div class="cheer-text">It’s your kanda 💖<br>your forever cheerleader!</div>
 </div>
 
+<!-- 🔥 IMPORTANT: replace song.mp3 with YOUR uploaded file name -->
 <audio id="music" loop>
   <source src="song.mp3" type="audio/mpeg">
 </audio>
@@ -115,30 +116,16 @@ canvas { position:absolute; top:0; left:0; z-index:1; }
 const message = `Roshu... ❤️
 
 I don’t quite know where this began — only that somewhere along the way, you became a feeling I can’t unfeel.
-We aren’t standing at a promise yet, not officially… no ring, no grand moment the world can point to.
-But in the quiet corners of my heart, I have already chosen you.
-Not for what you have.
-Not for what the world sees.
-But for who you are when no one is watching.
-I chose the gentleman in you—effortless, not performed.
-I chose the kindness that speaks even in your silence.
-I chose the calm I see in your eyes… the kind that makes chaos feel distant.
-And that smile of yours—soft, grounding, certain—it feels like home in a way I can’t explain.
-There’s something about your eyes…
-They don’t just look at me, they understand me.
-And in that moment, saying no was never really an option.
-This isn’t rushed.
-This isn’t uncertain.
-This is the quiet kind of right—the kind that doesn’t need to prove itself.
-So until the day a ring makes it official,
-I just want you to know this truth I already carry—
-You are mine, in the way souls recognize each other…
-And I am yours, in every way that truly matters.
-And if this is only the beginning,
-then I will spend a lifetime choosing you—
+
+We aren’t standing at a promise yet… but in my heart, I have already chosen you.
+
+You feel like calm. You feel like certainty.
+
+And if this is just the beginning,
+then I will spend a lifetime choosing you —
 again, and again, and again.
 
-Yours, always. ❤️`;
+Yours, always ❤️`;
 
 let i = 0;
 function typeWriter() {
@@ -155,17 +142,23 @@ function openLetter() {
 
   const music = document.getElementById('music');
   music.volume = 0;
-  music.play().catch(()=>{});
 
-  let vol = 0;
-  const fade = setInterval(() => {
-    if (vol < 1) {
-      vol += 0.05;
-      music.volume = vol;
-    } else {
-      clearInterval(fade);
-    }
-  }, 200);
+  // 🔥 important fix
+  music.load();
+
+  music.play().then(() => {
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 1) {
+        vol += 0.05;
+        music.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
+  }).catch(() => {
+    alert("Tap anywhere once more to play music ❤️");
+  });
 
   typeWriter();
   startHearts();
@@ -183,32 +176,30 @@ function startHearts() {
   }, 300);
 }
 
+// Confetti
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const confetti = [];
+let confetti = [];
 for (let i = 0; i < 150; i++) {
-  confetti.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*6+2,d:Math.random()*150});
+  confetti.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*6+2
+  });
 }
 
 function drawConfetti(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#fff";
-  ctx.beginPath();
+  ctx.fillStyle = "#fff";
   confetti.forEach(c=>{
-    ctx.moveTo(c.x,c.y);
-    ctx.arc(c.x,c.y,c.r,0,Math.PI*2,true);
-  });
-  ctx.fill();
-  updateConfetti();
-}
-
-function updateConfetti(){
-  confetti.forEach(c=>{
-    c.y+=Math.cos(c.d)+1+c.r/2;
-    if(c.y>canvas.height){c.y=0;}
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+    ctx.fill();
+    c.y += 2;
+    if(c.y > canvas.height) c.y = 0;
   });
 }
 

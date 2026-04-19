@@ -65,13 +65,6 @@ p { font-size:16px; line-height:1.6; color:#444; white-space:pre-line; }
 }
 
 canvas { position:absolute; top:0; left:0; z-index:1; }
-
-.countdown {
-  text-align:center;
-  margin-top:15px;
-  font-weight:bold;
-  color:#e91e63;
-}
 </style>
 </head>
 <body>
@@ -81,7 +74,6 @@ canvas { position:absolute; top:0; left:0; z-index:1; }
 <div class="letter" id="letter">
   <h1>To My Roshu ❤️</h1>
   <p id="text"></p>
-  <div class="countdown" id="countdown"></div>
 </div>
 
 <audio id="music" loop>
@@ -122,7 +114,21 @@ function typeWriter() {
 function openLetter() {
   document.querySelector('.envelope').style.display = 'none';
   document.getElementById('letter').style.display = 'block';
-  document.getElementById('music').play();
+
+  const music = document.getElementById('music');
+  music.volume = 0;
+  music.play();
+
+  let vol = 0;
+  const fade = setInterval(() => {
+    if (vol < 1) {
+      vol += 0.05;
+      music.volume = vol;
+    } else {
+      clearInterval(fade);
+    }
+  }, 200);
+
   typeWriter();
   startHearts();
 }
@@ -139,15 +145,6 @@ function startHearts() {
     setTimeout(()=>heart.remove(),6000);
   }, 300);
 }
-
-// Countdown (change date here)
-const targetDate = new Date("2026-12-20");
-setInterval(()=>{
-  const now = new Date();
-  const diff = targetDate - now;
-  const days = Math.floor(diff/(1000*60*60*24));
-  document.getElementById("countdown").innerHTML = `Counting days to us 💍: ${days} days`;
-},1000);
 
 // Confetti
 const canvas = document.getElementById('confetti');

@@ -26,7 +26,6 @@ body {
   align-items: center;
   cursor: pointer;
   z-index: 3;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 .envelope:before {
@@ -47,7 +46,6 @@ body {
   max-width: 700px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   z-index: 4;
 }
 
@@ -104,9 +102,9 @@ canvas { position:absolute; top:0; left:0; z-index:1; }
   <div class="cheer-text">It’s your kanda 💖<br>your forever cheerleader!</div>
 </div>
 
-<!-- 🔥 IMPORTANT: replace song.mp3 with YOUR uploaded file name -->
+<!-- ✅ YOUR SONG -->
 <audio id="music" loop>
-  <source src="song.mp3" type="audio/mpeg">
+  <source src="./kaazoom-i-couldnx27t-ask-for-anything-more-a-christmas-love-song-439441.mp3" type="audio/mpeg">
 </audio>
 
 <canvas id="confetti"></canvas>
@@ -143,7 +141,6 @@ function openLetter() {
   const music = document.getElementById('music');
   music.volume = 0;
 
-  // 🔥 important fix
   music.load();
 
   music.play().then(() => {
@@ -157,7 +154,9 @@ function openLetter() {
       }
     }, 200);
   }).catch(() => {
-    alert("Tap anywhere once more to play music ❤️");
+    document.body.addEventListener('click', () => {
+      music.play();
+    }, { once: true });
   });
 
   typeWriter();
@@ -176,7 +175,6 @@ function startHearts() {
   }, 300);
 }
 
-// Confetti
 const canvas = document.getElementById('confetti');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -204,10 +202,6 @@ function drawConfetti(){
 }
 
 setInterval(drawConfetti,30);
-
-setTimeout(()=>{
-  alert("I love you more than you’ll ever know ❤️");
-},15000);
 
 </script>
 
